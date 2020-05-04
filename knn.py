@@ -30,7 +30,7 @@ def kNN(k, training, testing): #open files see if i need to extract the first co
         with open(training) as File2:
             for row in csv.reader(File2, delimiter= ',', skipinitialspace= True):
                 training_array.append(row) #the length of each entry tells us how many columns there are 
-    training_array.pop(0) #remove the title column
+#     training_array.pop(0) #remove the title column
 
 
     testing_array = []
@@ -38,7 +38,7 @@ def kNN(k, training, testing): #open files see if i need to extract the first co
         with open(testing) as File:
             for row in csv.reader(File, delimiter= ',', skipinitialspace= True):
                 testing_array.append(row) #the length of each entry tells us how many columns there are 
-    testing_array.pop(0) #remove the title column
+#     testing_array.pop(0) #remove the title column
     lengthh = len(testing_array[0]) #shows you where to access the 
     class_t = testing_array[0][(lengthh-1)] #how to access the class
     # print("class", class_t)
