@@ -1,6 +1,10 @@
 import sys
+import numpy as np
+import os
+import csv
 
 def main():
+
     argc = len(sys.argv)
     if argc < 3:
         print("Program did not receive the number of parameters needed to run")
@@ -12,10 +16,38 @@ def main():
 
     if "NN" in algorithm:
         k = algorithm[0]
-        kNN(k)
+        kNN(k, training, testing)
+  
+    #WHAT IF DATA IS MISSING
 
-def kNN(k):
-    print("in knn")
+def kNN(k, training, testing): #open files see if i need to extract the first column out 
+    testing_file = open(testing, "r" )
+    training_file = open(training, "r")
+    # print("in knn")
+
+    training_array = []
+    if os.path.exists(training):
+        with open(training) as File2:
+            for row in csv.reader(File2, delimiter= ',', skipinitialspace= True):
+                training_array.append(row) #the length of each entry tells us how many columns there are 
+    training_array.pop(0) #remove the title column
+
+
+    testing_array = []
+    if os.path.exists(testing):
+        with open(testing) as File:
+            for row in csv.reader(File, delimiter= ',', skipinitialspace= True):
+                testing_array.append(row) #the length of each entry tells us how many columns there are 
+    testing_array.pop(0) #remove the title column
+    
+    # print("testing", testing_array)
+
+    # print("\ntraining", testing_array)
+
+    #classification compare with new value with ever training example
+
+
+
 
 
 
