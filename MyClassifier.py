@@ -20,6 +20,9 @@ def main():
         k = algorithm[0]
         kNN(k, training, testing)
 
+    if "NB" in algorithm:
+        NB(training, testing)
+
 def kNN(k, training, testing): #open files see if i need to extract the first column out 
     testing_file = open(testing, "r" )
     training_file = open(training, "r")
@@ -57,8 +60,10 @@ def kNN(k, training, testing): #open files see if i need to extract the first co
         k = int(k)
         top_k = e_distance[:k]
         clist = []
+       
         for i in top_k:
             clist.append(i[1]) #put the classes in a list to get the mode
+        print(clist)
         try:
             most = mode(clist)
             clist.clear()
@@ -68,8 +73,12 @@ def kNN(k, training, testing): #open files see if i need to extract the first co
             clist.clear()
         
     
-    for i in output_classes:
-        print(i)
+    # for i in output_classes:
+    #     print(i)
+    
+
+def NB(training, testing):
+    pass
 
 if __name__ == "__main__":
     main()
