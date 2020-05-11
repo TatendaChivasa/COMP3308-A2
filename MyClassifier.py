@@ -1,5 +1,4 @@
 import sys
-import numpy as np
 import os
 import csv
 import math 
@@ -63,7 +62,7 @@ def kNN(k, training, testing): #open files see if i need to extract the first co
        
         for i in top_k:
             clist.append(i[1]) #put the classes in a list to get the mode
-        print(clist)
+        # print(clist)
         try:
             most = mode(clist)
             clist.clear()
@@ -73,12 +72,99 @@ def kNN(k, training, testing): #open files see if i need to extract the first co
             clist.clear()
         
     
-    # for i in output_classes:
-    #     print(i)
+    for i in output_classes:
+        print(i)
     
 
-def NB(training, testing):
-    pass
+def NB(training, testing): 
+    output_classes = []
+
+    training_array = []
+    if os.path.exists(training):
+        with open(training) as File2:
+            for row in csv.reader(File2, delimiter= ','):
+                training_array.append(row) #the length of each entry tells us how many columns there are 
+
+
+    testing_array = []
+    if os.path.exists(testing):
+        with open(testing) as File:
+            for row in csv.reader(File, delimiter= ','):
+                testing_array.append(row) #the length of each entry tells us how many columns there are 
+ 
+    yesarraydata = []
+    noarraydata = []
+    yessummary = []
+    nosummary = []
+    output_classes = []
+    #separation by class
+    for row in training_array:
+        length = len(row)
+        if row[length-1] == "yes":
+            yesarraydata.append(row)
+        else:
+            noarraydata.append(row)
+
+    yessummary = dataset_stat(yesarraydata)
+    print(yessummary)
+    # print("\n\n\n\n\n length", len(yessummary))
+    # sys.exit()
+    nosummary = dataset_stat(noarraydata)
+    print(nosummary)
+
+    [x1,x2] = probyesandno(yesarraydata,noarraydata,training_array)
+    for row in testing_array:     
+        Pyes = calculateclassprob(row,yessummary,length,yesarraydata,training_array)
+        Pno = calculateclassprob(row,nosummary,length,noarraydata,training_array)
+        if Pyes >= Pno:
+            output_classes.append("yes")
+        else:
+            output_classes.append("no")
+
+    for i in output_classes:
+        print(i)            
+
+def meann(columnarray):
+    if "yes" in columnarray or "no" in columnarray:
+        pass
+    else:
+        columnarrayf = [float(i) for i in columnarray]
+        return mean(columnarrayf)
+
+def stdf(columnarray):
+    if "yes" in columnarray or "no" in columnarray:
+        pass   
+    else:
+        columnarrayf = [float(i) for i in columnarray]
+        #print(columnarrayf)
+        return stdev(columnarrayf)
+
+def dataset_stat (arraydata):
+    summary = [(meann(column), stdf(column), len(column)) for column in zip(*arraydata)]
+    return summary
+
+def probdensityfunction (x, mean, std):
+    x = float(x)
+    return (1 / (std*math.sqrt(2 * math.pi))) * math.exp(-((x-mean)**2 / (2 * std**2 )))
+
+def calculateclassprob (arraydata,summary,length,yesnoarray,trainingarray):
+    #probability = 1
+    x = len(yesnoarray)/len(trainingarray)
+    probability = x
+    for i in arraydata:
+        a = 0
+        mean, std, lenn = summary[a]
+        probability *= probdensityfunction(i,mean,std)
+        a = a + 1
+    return probability
+
+def probyesandno (yesarraydata,noarraydata,trainingdata):
+    pyesandno = []
+    x = len(yesarraydata)/len(trainingdata)
+    y = len(noarraydata)/len(trainingdata)
+    # print(x,y)
+    return x,y
+
 
 if __name__ == "__main__":
     main()
